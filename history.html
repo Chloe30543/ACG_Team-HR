@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css"> 
+    <title>History</title>
+    <style>
+        body {
+            font-family: 'NaumSquare', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Logo and Header Styles */
+        #header {
+            display: flex;
+            align-items: center;
+            padding: 20px 20px 10px 20px;
+        }
+
+        #logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* 로고와 HR 운영팀 사이의 간격 설정 */
+        }
+
+        #logo-container img {
+            width: 150px; /* Adjust logo size as needed */
+            height: auto;
+        }
+
+        #header h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin-left: 40px; /* 로고와 텍스트 사이의 간격을 40px로 설정 */
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            width: 200px;
+            float: left;
+            padding: 10px 10px 1.5px 10px;
+            border-right: 1px solid #b1aaaa;
+            height: auto;
+        }
+
+        #sidebar h1 {
+            font-size: 25px;
+            font-weight: bold;
+            margin-left: 10.5px;
+        }
+
+        #sidebar h3 {
+            margin: 30px 0 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        #sidebar h3::before {
+            content: '▶';
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        /* 기본 링크 스타일 */
+        #sidebar a {
+            color: #534545;
+            text-decoration: none;
+            display: block;
+            margin: 5px 0 5px 20px;
+        }
+
+
+        #sidebar h3,
+        #sidebar .sidebar-link-title {
+            margin: 30px 0 10px 15px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            color: #534545;
+            text-decoration: none;
+        }
+
+        /* 화살표 스타일 */
+        #sidebar .arrow {
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        /* 활성화된 링크 스타일 */
+        #sidebar .sidebar-link.active,
+        #sidebar .sidebar-link-title.active {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 활성화된 링크 스타일 */
+        #sidebar a.active {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 비활성화된 링크 스타일 */
+        #sidebar a.inactive {
+            color: #bbb;
+        }
+
+        /* 마우스를 올렸을 때의 효과 */
+        #sidebar a:hover {
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Custom select styling */
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 8px 10px;
+            font-size: 18px;
+            border: 1px solid #b1aaaa;
+            border-radius: 5px;
+            background-color: white;
+            font-family: 'NaumSquare', Arial, sans-serif;
+            text-align: center;
+            color: #333;
+            margin: 0 5px;
+        }
+
+        /* Arrow icon styling */
+        .custom-select::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        #year-select, #month-select {
+            font-size: 16px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .select-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Main content styling */
+        #main-content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+        /* 표 전체 스타일 */
+        table {
+            width: 100%;
+            border-collapse: separate; /* 셀 간격을 유지하여 테두리 둥글게 적용 */
+            border-spacing: 0; /* 셀 간격 제거 */
+            margin-top: 10px;
+            font-size: 14px;
+            overflow: hidden; /* 둥근 테두리가 잘 적용되도록 설정 */
+        }
+
+        th, td {
+            padding: 3px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-size: 14px; /*헤더 폰트 크기 조정*/
+        }
+
+        /* 상단 좌우 모서리 둥글게 */
+        thead th:first-child {
+            border-top-left-radius: 15px; /* 왼쪽 상단 모서리 둥글게 */
+        }
+        thead th:last-child {
+            border-top-right-radius: 15px; /* 오른쪽 상단 모서리 둥글게 */
+        }
+
+        /* 하단 좌우 모서리 둥글게 */
+        tfoot td:first-child {
+            border-bottom-left-radius: 15px; /* 왼쪽 하단 모서리 둥글게 */
+        }
+        tfoot td:last-child {
+            border-bottom-right-radius: 15px; /* 오른쪽 하단 모서리 둥글게 */
+        }
+
+        /* tbody의 마지막 행에는 둥근 모서리를 적용하지 않음 */
+        tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 0; /* 둥근 모서리 제거 */
+        }
+        tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 0; /* 둥근 모서리 제거 */
+        }
+
+
+        #summary-button {
+            font-size: 16px;
+            padding: 6px 10px;
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            margin-left: 8px;
+        }
+
+        /* Modal styles */
+        #summary-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #summary-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            width: 400px;
+        }
+
+        #summary-modal table {
+            width: 100%;
+            margin-top: 10px;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        #summary-modal th, #summary-modal td {
+            padding: 6px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        #summary-modal th {
+            background-color: #f2f2f2;
+        }
+
+        /* 표 상단 좌우 모서리 둥글게 */
+        #summary-modal thead th:first-child {
+            border-top-left-radius: 15px;
+        }
+        #summary-modal thead th:last-child {
+            border-top-right-radius: 15px;
+        }
+
+        /* 표 하단 좌우 모서리 둥글게 */
+        #summary-modal tfoot td:first-child {
+            border-bottom-left-radius: 15px;
+        }
+        #summary-modal tfoot td:last-child {
+            border-bottom-right-radius: 15px;
+        }
+
+        /* 합계 행 스타일 */
+        #summary-modal tfoot td {
+            font-weight: bold;
+        }
+
+        /* "합계" 셀 배경색 설정 */
+        #summary-modal tfoot td:first-child {
+            background-color: #f2f2f2;
+        }
+
+        #summary-modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #summary-modal .close-button {
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+
+
+        .morning {
+            background-color: #fef9e7; /* 연한 노랑색 */
+        }
+        .afternoon {
+            background-color: #fbeee6 ; /* 연한 연두색 */
+        }
+
+        .night {
+            background-color: #f4ecf7; /* 연한 보라색 */
+        }
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div id="logo-container">
+            <img src="C:/Users/ACG/Desktop/acglogo.jpg" alt="ACG Logo">
+        </div>
+        <h1>검사 현황</h1>
+    </div>
+
+    <div id="sidebar">
+        <h1>HR 운영팀</h1>
+        <h3>운영 보고</h3>
+        <a href="금주운영안.html" class="sidebar-link inactive">금주 운영안</a>
+        <a href="운영내역.html" class="sidebar-link inactive">운영 내역</a>
+        <a href="자리배치도.html" class="sidebar-link inactive">자리 배치도</a>
+        <h3>검사 현황</h3>
+        <a href="history.html" class="sidebar-link active">History</a>
+        <a href="일정.html" class="sidebar-link sidebar-link-title inactive">
+            <span class="arrow">▶</span> 검사 일정
+        </a>
+    </div>
+
+
+    <div id="main-content">
+        <div id="dropdown-container">
+            <select id="year-select"></select>
+            <select id="month-select">
+                <!-- Months will be predefined -->
+                <option value="01">1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <button id="summary-button">요약</button>
+        </div>
+        <div id="data-table">
+            <div class="table-container">
+                <table id="testTable">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>주차</th>
+                            <th>Time</th>
+                            <th>그룹</th>
+                            <th>회사</th>
+                            <th>검사</th>
+                            <th>구분</th>
+                            <th>시간</th>
+                            <th>장소</th>
+                            <th>응시인원</th>
+                            <th>출석인원</th>
+                            <th>예상 수익</th>
+                            <th>예상 지출</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for summary table -->
+    <div id="summary-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>[요약]</h3>
+                <span class="close-button" onclick="closeSummaryModal()">&times;</span>
+            </div>
+            <table id="summaryTable">
+                <thead>
+                    <tr>
+                        <th>그룹</th>
+                        <th>응시인원</th>
+                        <th>출석인원</th>
+                        <th>예상 수익</th>
+                        <th>예상 지출</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td>합계</td>
+                        <td id="totalTestCnt">0</td>
+                        <td id="totalRealCnt">0</td>
+                        <td id="totalRevenue">0</td>
+                        <td id="totalExpense">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+
+    <script>
+        // API URL with CORS proxy (remove proxy if not needed)
+        const apiURL = "https://intranet.test.acghr.co.kr/common/test_details_api.asp";
+
+        // 주차 계산 함수
+        function getWeekOfMonth(dateStr) {
+            const date = new Date(dateStr);
+            const month = date.getMonth();
+            const year = date.getFullYear();
+            const firstDayOfMonth = new Date(year, month, 1);
+            const firstDayWeekday = firstDayOfMonth.getDay();
+            const day = date.getDate();
+            const adjustedDate = day + firstDayWeekday - 1;
+            return Math.floor(adjustedDate / 7) + 1;
+        }
+
+        // 오전/오후/야간 판단 및 스타일 반환 함수
+        function getTimePeriod(timeStr) {
+            const hour = parseInt(timeStr.split(':')[0], 10);
+            if (hour >= 0 && hour < 12) {
+                return { period: "오전", className: "morning" };
+            } else if (hour >= 12 && hour < 18) {
+                return { period: "오후", className: "afternoon" };
+            } else {
+                return { period: "야간", className: "night" };
+            }
+        }
+
+        // 예상 수익 계산 함수
+        function calculateExpectedProfit(testerCnt, realCnt, company, group) {
+            const count = realCnt > 0 ? realCnt : testerCnt;
+            let multiplier = 10000; // 기본값
+
+            // 특정 회사 또는 그룹 조건에 따른 multiplier 설정
+            if (["롯데", "LG", "SK"].some(name => company.includes(name)) || 
+                (company === "기타" && group.includes("LX"))) {
+                multiplier = 5000;
+            }
+            
+            return count * multiplier;
+        }
+
+        // Fetch data from API and initialize dropdown options
+        async function fetchData() {
+            try {
+                const response = await fetch(apiURL);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Parsed data:", data);
+
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear().toString();
+                const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+
+                const years = Array.from(new Set(data.map(item => item.Date.split('-')[0]))).sort();
+                const yearSelect = document.getElementById("year-select");
+
+                years.forEach(year => {
+                    const option = document.createElement("option");
+                    option.value = year;
+                    option.textContent = year;
+                    yearSelect.appendChild(option);
+                });
+
+                yearSelect.value = currentYear;
+                document.getElementById("month-select").value = currentMonth;
+
+                displayData(data);
+
+                yearSelect.addEventListener("change", () => displayData(data));
+                document.getElementById("month-select").addEventListener("change", () => displayData(data));
+
+                // 요약 버튼 클릭 이벤트 설정
+                document.getElementById("summary-button").addEventListener("click", () => displaySummary(data));
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        // Function to filter, sort, and display data based on selected year and month
+        function displayData(data) {
+            const selectedYear = document.getElementById("year-select").value;
+            const selectedMonth = document.getElementById("month-select").value;
+            const tableBody = document.getElementById("testTable").querySelector("tbody");
+            tableBody.innerHTML = "";
+
+            // Filter data for selected year and month
+            let filteredData = data.filter(item => 
+                item.Date.startsWith(`${selectedYear}-${selectedMonth}`)
+            );
+
+            // Sort data by time period first (morning -> afternoon -> night) and then by Date
+            filteredData = filteredData.sort((a, b) => {
+                const timePeriodA = getTimePeriod(a.S_Time).order;
+                const timePeriodB = getTimePeriod(b.S_Time).order;
+
+                if (timePeriodA !== timePeriodB) {
+                    return timePeriodA - timePeriodB; // 시간대 순서 (오전 -> 오후 -> 야간)
+                } else {
+                    const dateA = new Date(a.Date + ' ' + a.S_Time);
+                    const dateB = new Date(b.Date + ' ' + b.S_Time);
+                    return dateA - dateB; // 날짜와 시간 오름차순
+                }
+            });
+
+            // Populate table rows with sorted and calculated data
+            filteredData.forEach(item => {
+                const row = document.createElement("tr");
+
+                const weekOfMonth = getWeekOfMonth(item.Date);
+                const timePeriod = getTimePeriod(item.S_Time);
+
+                // 예상 수익 계산 시 필요한 모든 인자 전달
+                const expectedProfit = calculateExpectedProfit(
+                    item.Tester_Cnt,
+                    item.Real_Cnt,
+                    item.Group,
+                    item.Compnay
+                );
+
+                const expectedExpense = calculateExpectedExpense(item.Tester_Cnt, item.Company, item.Group);
+
+                // 그룹과 회사의 위치를 변경하여 테이블에 표시
+                row.innerHTML = `
+                    <td>${item.Date || '-'}</td>
+                    <td>${selectedMonth}월 ${weekOfMonth}주차</td>
+                    <td class="${timePeriod.className}">${timePeriod.period}</td>
+                    <td>${item.Company || '-'}</td> <!-- 여기서 그룹과 회사 위치 변경 -->
+                    <td>${item.Group || '-'}</td> <!-- 여기서 그룹과 회사 위치 변경 -->
+                    <td>${item.Name || '-'}</td>
+                    <td>${item.Division || '-'}</td>
+                    <td>${item.S_Time || '-'} ~ ${item.E_Time || '-'}</td>
+                    <td>${item.Place || '-'}</td>
+                    <td>${parseInt(item.Tester_Cnt, 10) || 0}</td>
+                    <td>${parseInt(item.Real_Cnt, 10) || 0}</td>
+                    <td>${expectedProfit.toLocaleString() || 0}</td>
+                    <td>${expectedExpense.toLocaleString() || 0}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function calculateExpectedExpense(testerCnt, company, group, realCnt) {
+            const count = realCnt > 0 ? realCnt : testerCnt; // 출석인원이 있으면 출석인원으로, 없으면 응시인원으로 계산
+            let expense = 0;
+
+            if (company === "LG") {
+                expense = count < 10 ? 50000 : count * 5000;
+            } else if (company === "기타" && group.includes("LX")) {
+                expense = count < 10 ? 40000 : count * 4000;
+            } else if (company === "두산") {
+                expense = count < 10 ? 100000 : count * 10000;
+            } else if (company === "SK") {
+                expense = count * 5000;
+            } else if (company === "롯데") {
+                expense = count * 17000;
+            } else {
+                expense = count * 10000;
+            }
+
+            return expense;
+        }
+
+        function displaySummary(data) {
+            const selectedYear = document.getElementById("year-select").value;
+            const selectedMonth = document.getElementById("month-select").value;
+            const summaryTableBody = document.getElementById("summaryTable").querySelector("tbody");
+            summaryTableBody.innerHTML = "";
+
+            let totalTestCnt = 0, totalRealCnt = 0, totalRevenue = 0, totalExpense = 0;
+
+            const filteredData = data.filter(item => item.Date.startsWith(`${selectedYear}-${selectedMonth}`));
+            const groups = {};
+
+            filteredData.forEach(item => {
+                const company = item.Company;
+                const testerCnt = parseInt(item.Tester_Cnt, 10) || 0;
+                const realCnt = parseInt(item.Real_Cnt, 10) || 0;
+
+                const expectedProfit = calculateExpectedProfit(testerCnt, realCnt, company, item.Group);
+                const expectedExpense = calculateExpectedExpense(testerCnt, company, item.Group, realCnt); // 출석인원 추가
+
+                if (!groups[company]) groups[company] = { testerCnt: 0, realCnt: 0, revenue: 0, expense: 0 };
+                groups[company].testerCnt += testerCnt;
+                groups[company].realCnt += realCnt;
+                groups[company].revenue += expectedProfit;
+                groups[company].expense += expectedExpense;
+
+                totalTestCnt += testerCnt;
+                totalRealCnt += realCnt;
+                totalRevenue += expectedProfit;
+                totalExpense += expectedExpense;
+            });
+
+            for (const [company, values] of Object.entries(groups)) {
+                const row = `<tr>
+                    <td>${company}</td>
+                    <td>${values.testerCnt.toLocaleString()}</td>
+                    <td>${values.realCnt ? values.realCnt.toLocaleString() : '-'}</td>
+                    <td>${values.revenue.toLocaleString()}</td>
+                    <td>${values.expense.toLocaleString()}</td>
+                </tr>`;
+                summaryTableBody.insertAdjacentHTML("beforeend", row);
+            }
+
+            document.getElementById("totalTestCnt").textContent = totalTestCnt.toLocaleString();
+            document.getElementById("totalRealCnt").textContent = totalRealCnt.toLocaleString();
+            document.getElementById("totalRevenue").textContent = totalRevenue.toLocaleString();
+
+            // 예상지출 합계 업데이트
+            const totalExpenseElement = document.getElementById("totalExpense");
+            if (totalExpenseElement) {
+                totalExpenseElement.textContent = totalExpense.toLocaleString();
+            } else {
+                console.error("Element with ID 'totalExpense' not found in the DOM.");
+            }
+
+            document.getElementById("summary-modal").style.display = "flex";
+        }
+
+        function closeSummaryModal() {
+            document.getElementById("summary-modal").style.display = "none";
+        }
+
+        // Initialize data and dropdowns on page load
+        window.addEventListener("DOMContentLoaded", fetchData);
+    </script>
+    
+    
+</body>
+</html>

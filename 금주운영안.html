@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css"> 
+    <title>운영 보고</title>
+    <style>
+        body {
+            font-family: 'NaumSquare', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Logo and Header Styles */
+        #header {
+            display: flex;
+            align-items: center;
+            padding: 20px 20px 10px 20px;
+        }
+
+        #logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* 로고와 HR 운영팀 사이의 간격 설정 */
+        }
+
+        #logo-container img {
+            width: 150px; /* Adjust logo size as needed */
+            height: auto;
+        }
+
+        #header h1 {
+            font-size: 30px;
+            font-weight: bold;
+            margin-left: 40px; /* 로고와 텍스트 사이의 간격을 40px로 설정 */
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            width: 200px;
+            float: left;
+            padding: 10px 10px 1.5px 10px;
+            border-right: 1px solid #b1aaaa;
+            height: auto;
+        }
+
+        #sidebar h1 {
+            font-size: 25px;
+            font-weight: bold;
+            margin-left: 10.5px;
+        }
+
+        #sidebar h3 {
+            margin: 30px 0 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        #sidebar h3::before {
+            content: '▶';
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        /* 기본 링크 스타일 */
+        #sidebar a {
+            color: #534545;
+            text-decoration: none;
+            display: block;
+            margin: 5px 0 5px 20px;
+        }
+
+
+        #sidebar h3,
+        #sidebar .sidebar-link-title {
+            margin: 30px 0 10px 15px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            color: #534545;
+            text-decoration: none;
+        }
+
+        /* 화살표 스타일 */
+        #sidebar .arrow {
+            font-size: 12px;
+            margin-right: 8px;
+        }
+
+        /* 활성화된 링크 스타일 */
+        #sidebar .sidebar-link.active,
+        #sidebar .sidebar-link-title.active {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 활성화된 링크 스타일 */
+        #sidebar a.active {
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 비활성화된 링크 스타일 */
+        #sidebar a.inactive {
+            color: #bbb;
+        }
+
+        /* 마우스를 올렸을 때의 효과 */
+        #sidebar a:hover {
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Filter Container */
+        #filter-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        select, button {
+            padding: 5px 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 5px 10px; /* 확인 버튼과 동일한 크기로 조정 */
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #d5d5d5;
+        }
+
+        /* Content Container */
+        #content-container {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            align-items: flex-start; /* 세로 위치 통일 */
+            flex-wrap: nowrap;
+        }
+
+        /* Table Container Styles for 검사 현황 */
+        .table-container {
+            flex: 1;
+            max-width: 50%; /* 가로로 배치되도록 최대 너비 제한을 없앰 */
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .day-total {
+            font-weight: bold;
+            background-color: #e0e0e0;
+        }
+
+        /* Styles for Summary Tables */
+        .summary-instance {
+            display: flex;
+            gap: 20px; /* 표 사이 간격 */
+            margin-bottom: 20px; /* 표 간의 아래 간격 */
+            justify-content: flex-start;
+        }
+
+        .summary-instance table {
+            width: 300px; /* 표 너비 확장 */
+            border-collapse: collapse;
+            table-layout: fixed; /* 열 크기 고정 */
+        }
+
+        .summary-instance th, .summary-instance td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word; /* 텍스트 줄바꿈 */
+        }
+
+        .summary-instance th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: #fbe7c6;
+            font-weight: bold;
+        }
+
+        .colored-cell {
+            background-color: #fbe7c6;
+            font-weight: bold;
+        }
+
+        .summary-instance .bold {
+            font-weight: bold;
+        }
+
+        .summary-box-container {
+            display: flex;
+            flex-direction: column; /* Stack instances vertically */
+            gap: 20px;
+            max-width: 100%;
+        }
+
+        .summary-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 50%; /* Adjusted width */
+        }
+
+
+        .summary-header {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .summary-header-row {
+            display: flex;
+            gap: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* Paste Area */
+        .paste-area {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            min-height: 50px;
+            margin-bottom: 10px;
+        }
+
+        .completed {
+            background-color: #f9f9f9;
+            color: #999;
+        }
+
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #popup label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        #popup button {
+            margin-top: 10px;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <div id="logo-container">
+            <img src="C:/Users/ACG/Desktop/acglogo.jpg" alt="ACG Logo">
+        </div>
+        <h1>금주 운영안</h1>
+    </div>
+
+    <div id="sidebar">
+        <h1>HR 운영팀</h1>
+        <h3>운영 보고</h3>
+        <a href="금주운영안.html" class="sidebar-link active">금주 운영안</a>
+        <a href="운영내역.html" class="sidebar-link inactive">운영 내역</a>
+        <a href="자리배치도.html" class="sidebar-link inactive">자리 배치도</a>
+        <h3>검사 현황</h3>
+        <a href="history.html" class="sidebar-link inactive">History</a>
+        <a href="일정.html" class="sidebar-link sidebar-link-title inactive">
+            <span class="arrow">▶</span> 검사 일정
+        </a>
+    </div>
+
+    <!-- Filter Section -->
+    <div id="filter-container">
+        <select id="yearSelect"></select>
+        <select id="monthSelect"></select>
+        <select id="weekSelect">
+            <option value="1">1주차</option>
+            <option value="2">2주차</option>
+            <option value="3">3주차</option>
+            <option value="4">4주차</option>
+        </select>
+        <button id="fetchButton">확인</button> <button id="redoButton">다시 붙여넣기</button>
+    </div>
+
+
+    <div id="popup" style="display: none;">
+        <p>다시 붙여넣을 데이터를 선택하세요:</p>
+        <div id="popupCheckboxContainer"></div>
+        <button id="popupConfirm">확인</button>
+        <button id="popupCancel">취소</button>
+    </div>
+
+    <!-- Main Content Section -->
+    <div id="content-container">
+        <!-- 검사 현황 Table -->
+        <div class="table-container">
+            <div class="table-title">검사 현황</div>
+            <div id="tableContainer"></div>
+        </div>
+
+        <div id="summary-container">
+            <div id="pasteAreaContainer" class="paste-area-container"></div>
+            <div id="summaryTablesContainer" class="summary-box-container"></div>
+        </div>
+
+    </div>
+
+
+    <script>
+        const examApiURL = "https://intranet.test.acghr.co.kr/common/test_details_api.asp";
+    
+        document.addEventListener("DOMContentLoaded", function() {
+            initializeYearAndMonthDropdown();
+            document.getElementById("fetchButton").addEventListener("click", fetchAndRenderData);
+
+            // totalExpenseCell 존재 여부 확인 후 이벤트 추가
+            const totalExpenseCell = document.getElementById("totalExpenseCell");
+            if (totalExpenseCell) {
+                totalExpenseCell.addEventListener("click", () => {
+                    openExpenseInputPopup();
+                });
+            } else {
+                console.warn("totalExpenseCell 요소를 찾을 수 없습니다. 예상 지출 셀이 나중에 추가되었는지 확인하세요.");
+            }
+        });
+
+
+        document.getElementById("redoButton").addEventListener("click", () => {
+            const fetchedDatesInTable = fetchedDates; // 검사 현황 표의 일자 리스트
+            if (fetchedDatesInTable.length === 1) {
+                // 일자가 1개인 경우
+                const dateToRedo = fetchedDatesInTable[0];
+                pastedDataList = pastedDataList.filter(data => data.date !== dateToRedo); // 기존 데이터 제거
+                renderPasteAreas(); // 붙여넣기 공간 생성
+            } else if (fetchedDatesInTable.length > 1) {
+                // 일자가 2개 이상인 경우 팝업 열기
+                openRedoPopup(fetchedDatesInTable);
+            }
+        });
+
+        document.getElementById("summaryTablesContainer").addEventListener("click", (event) => {
+            // 클릭된 요소가 totalExpenseCell인지 확인
+            if (event.target && event.target.id === "totalExpenseCell") {
+                openExpenseInputPopup();
+            }
+        });
+                                                   
+                                        
+
+
+        let pasteAreaContainer = document.getElementById("pasteAreaContainer");
+        let pastedDataList = [];
+        let fetchedDates = [];
+        let rentalCost = 0; // 렌탈비
+        let venueCost = 0;  // 대관비
+        let totalOriginalCost = 0; // 원금 총합
+        let totalAdditionalCost = 0; // 비용 총합
+        let baseCost = 0; // 기본 예상 지출
+
+    
+        function initializeYearAndMonthDropdown() {
+            fetch(examApiURL)
+                .then(response => response.json())
+                .then(data => {
+                    const years = new Set();
+                    const months = new Set();
+                    data.forEach(item => {
+                        const dateString = String(item.Date);
+                        if (dateString.includes("-")) {
+                            const [year, month] = dateString.split("-");
+                            years.add(year);
+                            months.add(month);
+                        }
+                    });
+    
+                    const yearSelect = document.getElementById("yearSelect");
+                    yearSelect.innerHTML = "";
+                    Array.from(years).sort((a, b) => b - a).forEach(year => {
+                        const option = document.createElement("option");
+                        option.value = year;
+                        option.textContent = `${year}년`;
+                        yearSelect.appendChild(option);
+                    });
+    
+                    const monthSelect = document.getElementById("monthSelect");
+                    monthSelect.innerHTML = "";
+                    Array.from(months).sort((a, b) => a - b).forEach(month => {
+                        const option = document.createElement("option");
+                        option.value = month;
+                        option.textContent = `${parseInt(month)}월`;
+                        monthSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error("Error fetching years and months:", error));
+        }
+    
+    
+        function calculateWeekNumber(date, firstDayOfMonth) {
+            const dayOfWeekOffset = firstDayOfMonth.getDay(); // 해당 월 1일의 요일 (0: 일요일, 1: 월요일, ...)
+            const dayOfMonth = date.getDate(); // 현재 날짜의 일자
+
+            // (현재 날짜 - 첫 번째 월요일까지의 날짜 + 7) / 7 로 주차 계산
+            return Math.ceil((dayOfMonth + dayOfWeekOffset - 1) / 7);
+        }
+
+        function filterWeekendAndGroupByTime(data, year, month, selectedWeek) {
+            const firstDayOfMonth = new Date(year, month - 1, 1);
+            return data.filter(item => {
+                const date = new Date(item.Date);
+                const itemYear = date.getFullYear();
+                const itemMonth = date.getMonth() + 1;
+                const itemWeek = calculateWeekNumber(date, firstDayOfMonth);
+                const itemDay = date.getDay();
+                return itemYear === parseInt(year) && itemMonth === parseInt(month) &&
+                       itemWeek === selectedWeek && (itemDay === 6 || itemDay === 0);
+            });
+        }
+
+    
+        function fetchAndRenderData() {
+            const year = document.getElementById("yearSelect").value;
+            const month = document.getElementById("monthSelect").value;
+            const week = parseInt(document.getElementById("weekSelect").value);
+
+            fetchData(year, month).then(data => {
+                if (Array.isArray(data)) {
+                    fetchedData = data; // 전체 데이터를 저장
+                    const filteredData = filterWeekendAndGroupByTime(data, year, month, week);
+
+                    // 필터링된 데이터의 날짜만 추출 후 중복 제거
+                    fetchedDates = [...new Set(filteredData.map(item => item.Date))];
+
+                    // 필요한 최대 개수만큼만 자르기 (예: 2개)
+                    fetchedDates = fetchedDates.slice(0, 2);
+
+                    console.log("Filtered Dates for Paste Areas:", fetchedDates);
+
+                    // 검사현황표 렌더링
+                    renderTable(filteredData);
+
+                    // 붙여넣기 공간 렌더링
+                    renderPasteAreas();
+                    renderTablesByDate(pastedDataList); // 요약 테이블 렌더링
+                } else {
+                    console.error("Unexpected data format:", data);
+                }
+            });
+        }
+    
+        function fetchData(year, month) {
+            const requestURL = `${examApiURL}?year=${year}&month=${month}&timestamp=${new Date().getTime()}`;
+            return fetch(requestURL)
+                .then(response => response.json())
+                .then(data => {
+                    return data;
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    return null;
+                });
+        }
+    
+        function categorizeTime(time) {
+            const hour = parseInt(time.split(":")[0], 10);
+            if (hour >= 5 && hour < 12) return "오전";
+            if (hour >= 12 && hour < 17) return "오후";
+            return "야간";
+        }
+    
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+    
+        function renderTable(data) {
+            const tableContainer = document.getElementById('tableContainer');
+            tableContainer.innerHTML = '';
+    
+            const groupedData = {};
+            data.forEach(item => {
+                const dateKey = item.Date;
+                const timeCategory = categorizeTime(item.S_Time);
+                const company = item.Company || "공란"; 
+                const testerCnt = parseInt(item.Tester_Cnt) || 0;
+    
+                if (!groupedData[dateKey]) groupedData[dateKey] = {};
+                if (!groupedData[dateKey][timeCategory]) groupedData[dateKey][timeCategory] = {};
+                if (!groupedData[dateKey][timeCategory][company]) groupedData[dateKey][timeCategory][company] = 0;
+    
+                groupedData[dateKey][timeCategory][company] += testerCnt;
+            });
+    
+            Object.keys(groupedData).forEach(dateKey => {
+                const formattedDate = formatDate(dateKey);
+                const table = document.createElement('table');
+                table.innerHTML = `
+                    <tr>
+                        <th>일자</th>
+                        <th>Time</th>
+                        <th>회사</th>
+                        <th>인원</th>
+                        <th>총원</th>
+                    </tr>
+                `;
+    
+                let dailyTotal = 0;
+                let isDateRendered = false;
+    
+                const dateRowCount = Object.keys(groupedData[dateKey]).reduce((sum, timeCategory) => {
+                    return sum + Object.keys(groupedData[dateKey][timeCategory]).length;
+                }, 0);
+    
+                Object.keys(groupedData[dateKey]).forEach(timeCategory => {
+                    const timeData = groupedData[dateKey][timeCategory];
+                    const timeTotal = Object.values(timeData).reduce((sum, cnt) => sum + cnt, 0);
+                    dailyTotal += timeTotal;
+    
+                    let isTimeRendered = false;
+                    Object.keys(timeData).forEach((company, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            ${!isDateRendered ? `<td rowspan="${dateRowCount}">${formattedDate}</td>` : ""}
+                            ${!isTimeRendered ? `<td rowspan="${Object.keys(timeData).length}">${timeCategory}</td>` : ""}
+                            <td>${company}</td>
+                            <td>${formatNumber(timeData[company])}</td>
+                            ${!isTimeRendered ? `<td rowspan="${Object.keys(timeData).length}">${formatNumber(timeTotal)}</td>` : ""}
+                        `;
+                        isDateRendered = true;
+                        isTimeRendered = true;
+                        table.appendChild(row);
+                    });
+                });
+    
+                const totalRow = document.createElement('tr');
+                totalRow.className = "day-total";
+                totalRow.innerHTML = `<td colspan="4">합계</td><td>${formatNumber(dailyTotal)}</td>`;
+                table.appendChild(totalRow);
+    
+                tableContainer.appendChild(table);
+            });
+        }
+    
+        function formatDate(date) {
+            const d = new Date(date);
+            const month = d.getMonth() + 1;
+            const day = d.getDate();
+            const weekday = ["일", "월", "화", "수", "목", "금", "토"][d.getDay()];
+            return `${month}/${day} (${weekday})`;
+        }
+
+        // ISO 형식의 날짜(예: "2024-11-09")를 "11/9" 형식으로 변환
+        function convertToShortDate(isoDate) {
+            if (!isoDate || typeof isoDate !== "string") {
+                console.error("Invalid date format received:", isoDate);
+                return isoDate; // 입력된 값이 ISO 형식이 아니면 그대로 반환
+            }
+
+            const dateParts = isoDate.split("-");
+            if (dateParts.length !== 3) {
+                console.error("Invalid ISO date format:", isoDate);
+                return isoDate; // 유효하지 않은 ISO 형식이면 그대로 반환
+            }
+
+            const month = parseInt(dateParts[1], 10);
+            const day = parseInt(dateParts[2], 10);
+
+            return `${month}/${day}`;
+        }
+
+
+        function extractDatePart(dateWithDay) {
+            if (!dateWithDay || typeof dateWithDay !== "string") {
+                console.error("유효하지 않은 날짜 형식입니다:", dateWithDay);
+                return null;
+            }
+
+            const dateRegex = /\d{1,2}\/\d{1,2}/; // "MM/DD" 형식만 추출
+            const match = dateWithDay.match(dateRegex);
+            return match ? match[0].trim() : null; // "MM/DD" 반환 또는 null
+        }
+
+        function validatePastedData(data, expectedDate) {
+            if (!data || typeof data !== "string") {
+                console.error("유효하지 않은 데이터입니다. 데이터는 문자열이어야 합니다.");
+                return false;
+            }
+
+            const rows = data.split("\n").filter(Boolean);
+            if (!rows || rows.length === 0) {
+                console.error("붙여넣기 데이터가 비어 있습니다.");
+                return false;
+            }
+
+            const firstCell = rows[0]?.split("\t")[0]?.trim();
+            const pastedDate = extractDatePart(firstCell); // 붙여넣기 데이터에서 날짜 추출
+            const expectedShortDate = convertToShortDate(expectedDate); // 예상 날짜를 "MM/DD"로 변환
+
+            if (!pastedDate || pastedDate !== expectedShortDate) {
+                console.error(`Date mismatch: expected ${expectedShortDate}, found ${pastedDate}`);
+                return false;
+            }
+
+            return true;
+
+        }
+
+        function renderPasteAreas() {
+            pasteAreaContainer.innerHTML = ""; // 기존 내용을 초기화
+
+            // 남은 날짜를 필터링
+            const remainingDates = fetchedDates.filter(date => 
+                !pastedDataList.some(data => data.date === date)
+            );
+
+            // 디버깅: 남은 날짜 출력
+            console.log("Remaining Dates:", remainingDates);
+
+            if (remainingDates.length === 0) {
+                return; // 남은 날짜가 없으면 아무것도 렌더링하지 않음
+            }
+
+            // 남은 날짜만큼 붙여넣기 공간 생성
+            remainingDates.forEach(date => {
+                const pasteArea = document.createElement("div");
+                pasteArea.className = "paste-area";
+                pasteArea.contentEditable = "true";
+                pasteArea.dataset.date = date;
+                pasteArea.innerText = `${convertToShortDate(date)} 데이터를 붙여넣기...`;
+                pasteArea.addEventListener("input", handleDataPaste);
+                pasteAreaContainer.appendChild(pasteArea);
+            });
+        }
+
+
+        function renderTablesByDate(dataList) {
+            const summaryTablesContainer = document.getElementById("summaryTablesContainer");
+
+            // 기존 테이블 초기화
+            summaryTablesContainer.innerHTML = '';
+
+            // 날짜 순서 + 타임스탬프 순서로 정렬
+            const sortedDataList = dataList.sort((a, b) => {
+                const dateDiff = new Date(a.date) - new Date(b.date); // 날짜 기준 정렬
+                return dateDiff !== 0 ? dateDiff : a.timestamp - b.timestamp; // 동일 날짜에서는 타임스탬프 기준
+            });
+
+            // 정렬된 데이터 리스트를 반복하며 테이블 렌더링
+            sortedDataList.forEach(item => {
+                if (!item.date) return;
+
+                const parsedData = parsePastedData(item.data);
+                const operationTable = createOperationTable(parsedData, item.date);
+                const costTable = createCostTable();
+
+                const summaryInstance = document.createElement("div");
+                summaryInstance.className = "summary-instance";
+                summaryInstance.dataset.date = item.date;
+                summaryInstance.innerHTML = operationTable + costTable;
+
+                summaryTablesContainer.appendChild(summaryInstance);
+            });
+        }
+
+        function parsePastedData(data) {
+            const rows = data.split("\n").filter(Boolean); // 데이터 행 분리
+            const header = rows[0].split("\t").map(cell => cell.trim()); // 헤더 추출 및 공백 제거
+            const firstGroupIndex = header.indexOf("구분"); // 첫 번째 "구분" 열의 위치
+            const secondGroupIndex = header.lastIndexOf("구분"); // 두 번째 "구분" 열의 위치
+            const originalCostIndex = header.indexOf("원금"); // 원금열
+            const additionalCostIndex = header.indexOf("비용"); // 비용열
+
+            // 필수 열의 유효성 확인
+            if (
+                firstGroupIndex === -1 || 
+                secondGroupIndex === -1 || 
+                firstGroupIndex === secondGroupIndex || 
+                originalCostIndex === -1 || 
+                additionalCostIndex === -1
+            ) {
+                console.error("필수 열을 찾을 수 없습니다. 헤더를 확인하세요:", header);
+                return {
+                    acg: 0,
+                    acgNames: [],
+                    supervisor: 0,
+                    phoneSupport: 0,
+                    supervision: 0,
+                    totalExpense: 0 // 예상 지출 추가
+                };
+            }
+
+            let acgCount = 0;
+            let acgNames = [];
+            let supervisorCount = 0;
+            let phoneSupportCount = 0;
+            let supervisionCount = 0;
+            let totalOriginalCost = 0; // 원금열 총합
+            let totalAdditionalCost = 0; // 비용열 총합
+
+            // 데이터 행 순회
+            rows.slice(1).forEach((row, rowIndex) => {
+                const cells = row.split("\t");
+
+                // 데이터 길이가 헤더보다 짧을 경우 부족한 열을 빈 값("")으로 채움
+                if (cells.length < header.length) {
+                    console.warn(`행 ${rowIndex + 1}가 불완전합니다. 누락된 셀을 기본값으로 채웁니다:`, row);
+                    while (cells.length < header.length) {
+                        cells.push("");
+                    }
+                }
+
+                // 그룹 정보 처리
+                const firstGroupValue = cells[firstGroupIndex]?.trim();
+                const secondGroupValue = cells[secondGroupIndex]?.trim();
+                const nameColumnValue = cells[12]?.trim(); // 이름 열 (예: 세 번째 열)
+
+                if (firstGroupValue?.includes("감독관")) {
+                    supervisorCount++;
+                }
+                if (firstGroupValue?.includes("유선응대")) {
+                    phoneSupportCount++;
+                }
+                if (firstGroupValue?.includes("감독운영")) {
+                    supervisionCount++;
+                }
+
+                if (secondGroupValue) {
+                    acgCount++;
+                    if (nameColumnValue) acgNames.push(nameColumnValue);
+                }
+
+                // 원금열 (7번째 열) 값 추출
+                const originalCostStr = cells[7]?.replace(/,/g, '').trim(); // 쉼표 제거 및 공백 제거
+                const originalCost = parseInt(originalCostStr) || 0; // 숫자로 변환
+
+                // 비용열 (18번째 열) 값 추출
+                const additionalCostStr = cells[18]?.replace(/원/g, '').replace(/,/g, '').trim(); // 쉼표 및 "원" 제거
+                const additionalCost = parseInt(additionalCostStr) || 0; // 숫자로 변환
+
+
+                // 총합 계산
+                totalOriginalCost += originalCost;
+                totalAdditionalCost += additionalCost;
+
+                // 기본 예상 지출 계산
+                baseCost = totalOriginalCost + totalAdditionalCost;
+                console.log("기본 예상 지출 (원금 + 비용):", baseCost.toLocaleString());
+            });
+
+            // 최종 총합 계산
+            const totalExpense = totalOriginalCost + totalAdditionalCost + rentalCost + venueCost;
+            
+            // 쉼표가 포함된 포맷으로 출력
+            const formattedTotalExpense = totalExpense.toLocaleString();
+
+            console.log("총 원금:", totalOriginalCost.toLocaleString());
+            console.log("총 비용:", totalAdditionalCost.toLocaleString());
+            console.log("총 예상 지출 (포맷 포함):", formattedTotalExpense);
+            
+            // // 예상 지출을 HTML 요소에 표시 (예: 예상 지출 셀)
+            // document.getElementById("totalExpenseCell").textContent = formattedTotalExpense;
+
+            return {
+                acg: acgCount,
+                acgNames: acgNames,
+                supervisor: supervisorCount,
+                phoneSupport: phoneSupportCount,
+                supervision: supervisionCount,
+                totalExpense: totalExpense // 계산 결과 포함
+            };
+        }
+
+        function fetchRevenueFromHistory() {
+            return fetch("history.html")
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, "text/html");
+
+                    // 예상 수익 데이터를 포함하는 요소를 선택
+                    const revenueElement = doc.querySelector("#expectedProfit"); // id가 revenueData인 요소를 선택
+                    if (!revenueElement) throw new Error("Revenue element not found");
+
+                    // 텍스트에서 쉼표 제거 후 숫자로 변환
+                    const revenue = parseInt(revenueElement.textContent.replace(/,/g, '').trim(), 10);
+                    if (isNaN(revenue)) throw new Error("Invalid revenue value");
+
+                    console.log("Fetched revenue:", revenue); // 확인용 로그
+                    return revenue;
+                })
+                .catch(error => {
+                    console.error("Error fetching revenue:", error);
+                    return 0; // 오류 발생 시 기본값 반환
+                });
+        }
+
+
+
+        // function parsePastedData(data) {
+        //     const rows = data.split("\n").filter(Boolean); // 데이터 행 분리
+        //     const header = rows[0].split("\t"); // 헤더 추출
+        //     const firstGroupIndex = header.indexOf("구분"); // 첫 번째 "구분" 열의 위치
+        //     const secondGroupIndex = header.lastIndexOf("구분"); // 두 번째 "구분" 열의 위치
+        //     const originalCostIndex = header.indexOf("원금");
+        //     const additionalCostIndex = header.indexOf("비용");
+
+        //     if (firstGroupIndex === -1 || secondGroupIndex === -1 || firstGroupIndex === secondGroupIndex) {
+        //         console.error("구분 열의 위치를 찾을 수 없습니다.");
+        //         return {
+        //             acg: 0,
+        //             acgNames: [],
+        //             supervisor: 0,
+        //             phoneSupport: 0,
+        //             supervision: 0,
+        //             totalExpense: 0 // 예상 지출 추가
+        //         };
+        //     }
+
+        //     let acgCount = 0;
+        //     let acgNames = [];
+        //     let supervisorCount = 0;
+        //     let phoneSupportCount = 0;
+        //     let supervisionCount = 0;
+        //     let totalOriginalCost = 0; // 원금열 총합
+        //     let totalAdditionalCost = 0; // 비용열 총합
+
+        //     rows.slice(1).forEach((row) => {
+        //         const cells = row.split("\t");
+        //         const firstGroupValue = cells[firstGroupIndex]?.trim();
+        //         const secondGroupValue = cells[secondGroupIndex]?.trim();
+        //         const nameColumnValue = cells[12]?.trim(); // 이름 열 (예: 세 번째 열)
+
+        //         // 첫 번째 "구분" 열 처리
+        //         if (firstGroupValue.includes("감독관")) {
+        //             supervisorCount++;
+        //         }
+        //         if (firstGroupValue.includes("유선응대")) {
+        //             phoneSupportCount++;
+        //         }
+        //         if (firstGroupValue.includes("감독운영")) {
+        //             supervisionCount++;
+        //         }
+
+        //         // 두 번째 "구분" 열 처리
+        //         if (secondGroupValue) {
+        //             acgCount++;
+        //             if (nameColumnValue) acgNames.push(nameColumnValue);
+        //         }
+
+        //         const originalCost = parseInt(cells[originalCostIndex]?.trim()) || 0;
+        //         const additionalCostStr = cells[additionalCostIndex]?.replace(/원/g, '').replace(/,/g, '').trim();
+        //         const additionalCost = parseInt(additionalCostStr) || 0;
+
+        //         totalOriginalCost += originalCost;
+        //         totalAdditionalCost += additionalCost;
+
+
+        //     });
+
+        //     const totalExpense = totalOriginalCost + totalAdditionalCost;
+        //     console.log("총 예상 지출:", totalExpense);
+
+        //     return {
+        //         acg: acgCount,
+        //         acgNames: acgNames,
+        //         supervisor: supervisorCount,
+        //         phoneSupport: phoneSupportCount,
+        //         supervision: supervisionCount,
+        //         totalExpense: totalExpense // 계산 결과 포함                
+        //     };
+        // }
+
+        function calculateAndUpdateExpense() {
+            const finalCost = baseCost + venueCost + rentalCost; // 최종 예상 지출
+            const formattedTotalExpense = finalCost.toLocaleString(); // 포맷팅된 값
+
+            const totalExpenseCell = document.getElementById("totalExpenseCell");
+            if (totalExpenseCell) {
+                totalExpenseCell.textContent = formattedTotalExpense;
+                totalExpenseCell.style.color = "black"; // 색상 변경
+            } else {
+                console.error("totalExpenseCell 요소를 찾을 수 없습니다.");
+            }
+
+            console.log("최종 예상 지출 (기본 + 대관비 + 렌탈비):", formattedTotalExpense);
+        }
+
+
+        function createOperationTable(parsedData, date) {
+            const acgTooltip = parsedData.acgNames.length > 0
+                ? `<div class="tooltip-box">${parsedData.acgNames.join("<br>")}</div>`
+                : "데이터 없음";
+
+            return `
+                <table>
+                    <tr>
+                        <th colspan="4">${convertToShortDate(date)} 운영 인력</th>
+                    </tr>
+                    <tr>
+                        <th>ACG</th>
+                        <th>감독관</th>
+                        <th>유선응대</th>
+                        <th>감독운영</th>
+                    </tr>
+                    <tr>
+                        <td class="tooltip">${parsedData.acg}<div class="tooltip-content">${acgTooltip}</div></td>
+                        <td>${parsedData.supervisor}</td>
+                        <td>${parsedData.phoneSupport}</td>
+                        <td>${parsedData.supervision}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="highlight">인력</td>
+                        <td colspan="2">${parsedData.acg + parsedData.supervisor + parsedData.phoneSupport + parsedData.supervision}</td>
+                    </tr>
+                </table>
+            `;
+        }
+
+        // 예상 비용 테이블 생성
+        function createCostTable() {
+            fetchRevenueFromHistory().then(revenue => {
+                const finalCost = baseCost + venueCost + rentalCost; // 최종 예상 지출
+                const profit = revenue - finalCost; // 예상 이익
+                const profitRatio = ((profit / revenue) * 100).toFixed(2); // 이익률 계산
+                const formattedInitialExpense = (baseCost + venueCost + rentalCost).toLocaleString(); // 초기 지출 포맷팅
+
+                const tableHTML = `
+                    <table>
+                        <tr><th colspan="2">예상 비용</th></tr>
+                        <tr><td>예상 매출</td><td>${revenue.toLocaleString()}</td></tr>
+                        <tr>
+                            <td>예상 지출</td>
+                            <td id="totalExpenseCell" style="cursor:pointer; color:blue;" onclick="openExpenseInputPopup()">
+                                ${formattedInitialExpense}
+                            </td>
+                        </tr>
+                        <tr><td>예상 이익</td><td>${profit.toLocaleString()}</td></tr>
+                        <tr><td class="colored-cell">이익률</td><td class="colored-cell">${profitRatio}%</td></tr>
+                    </table>
+                `;
+
+                const summaryContainer = document.getElementById("summaryTablesContainer");
+                summaryContainer.innerHTML = tableHTML;
+            });
+        }
+
+        function renderSummaryTables(parsedData, date) {
+            const summaryContainer = document.getElementById("summaryTablesContainer");
+
+            const operationTable = createOperationTable(parsedData, date);
+            const costTableHTML = `
+                <div class="summary-instance">
+                    ${operationTable}
+                </div>
+            `;
+
+            const summaryInstance = document.createElement("div");
+            summaryInstance.className = "summary-instance";
+            summaryInstance.dataset.date = date;
+            summaryInstance.innerHTML = operationTable + costTable;
+
+            // 날짜 순서를 유지하며 추가
+            const existingInstances = Array.from(document.querySelectorAll(".summary-instance"));
+            const insertBeforeInstance = existingInstances.find(instance => new Date(instance.dataset.date) > new Date(date));
+
+            if (insertBeforeInstance) {
+                summaryContainer.insertBefore(summaryInstance, insertBeforeInstance);
+            } else {
+                summaryContainer.appendChild(summaryInstance);
+            }
+
+            summaryContainer.innerHTML += costTableHTML; // 기존 내용 뒤에 추가
+            createCostTable(); // 예상 비용 표 추가
+        }
+
+
+        function handleDataPaste(event) {
+            const pasteArea = event.target;
+            const pastedData = pasteArea.innerText.trim();
+            const date = pasteArea.dataset.date;
+            console.log(pastedData);
+
+            if (!pastedData) {
+                alert("데이터를 입력하세요.");
+                return;
+            }
+
+            if (!validatePastedData(pastedData, date)) {
+                alert(`잘못된 날짜의 데이터입니다. 예상 날짜: ${convertToShortDate(date)}`);
+                pasteArea.innerText = `${convertToShortDate(date)} 데이터를 붙여넣기...`;
+                return;
+            }
+
+            const existingIndex = pastedDataList.findIndex(data => data.date === date);
+            if (existingIndex > -1) {
+                pastedDataList[existingIndex].data = pastedData;
+                pastedDataList[existingIndex].timestamp = Date.now(); // 타임스탬프 업데이트
+            } else {
+                pastedDataList.push({ date, data: pastedData, timestamp: Date.now() });
+            }
+
+            pasteArea.remove();
+            renderTablesByDate(pastedDataList);
+            renderPasteAreas();
+        }
+
+
+        // 스타일 추가
+        const style = document.createElement("style");
+        style.innerHTML = `
+            .tooltip {
+                position: relative;
+                cursor: pointer;
+            }
+            .tooltip-box {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 5px;
+                z-index: 10;
+                white-space: nowrap;
+            }
+            .tooltip:hover .tooltip-box {
+                display: block;
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log(pastedDataList);
+
+        function openRedoPopup(dates) {
+            const popup = document.getElementById("popup");
+            const checkboxContainer = document.getElementById("popupCheckboxContainer");
+            checkboxContainer.innerHTML = ""; // 기존 내용을 초기화
+
+            // 날짜 목록을 체크박스로 표시
+            dates.forEach(date => {
+                const shortDate = convertToShortDate(date); // ISO 날짜를 "MM/DD" 형식으로 변환
+                const label = document.createElement("label");
+                label.innerHTML = `<input type="checkbox" value="${date}"> ${shortDate}`;
+                checkboxContainer.appendChild(label);
+            });
+
+            // 팝업 열기
+            popup.style.display = "block";
+
+            // 확인 버튼 동작 설정
+            document.getElementById("popupConfirm").onclick = () => {
+                const selectedDates = Array.from(
+                    document.querySelectorAll("#popup input[type='checkbox']:checked")
+                ).map(checkbox => checkbox.value); // 선택된 날짜 가져오기
+
+                if (selectedDates.length === 0) {
+                    alert("일자를 선택하세요."); // 아무것도 선택하지 않은 경우 경고창
+                    return;
+                }
+
+                // 선택된 날짜에 해당하는 데이터 제거
+                selectedDates.forEach(date => {
+                    pastedDataList = pastedDataList.filter(data => data.date !== date); // 기존 데이터 제거
+                });
+
+                renderPasteAreas(); // 붙여넣기 공간 갱신
+                popup.style.display = "none"; // 팝업 닫기
+            };
+
+            // 취소 버튼 동작 설정
+            document.getElementById("popupCancel").onclick = () => {
+                // 붙여넣기 공간 초기화
+                const pasteAreaContainer = document.getElementById("pasteAreaContainer");
+                pasteAreaContainer.innerHTML = ""; // 붙여넣기 공간 제거
+
+                // 팝업 닫기
+                popup.style.display = "none";
+            };
+        }
+
+        function openExpenseInputPopup() {
+            const popup = document.createElement("div");
+            popup.id = "expense-popup";
+            popup.style = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 20px;
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                z-index: 1000;
+            `;
+
+            popup.innerHTML = `
+                <h3>추가 비용 입력</h3>
+                <label>
+                    장소 대관비: <input type="number" id="venueCostInput" placeholder="0" value="${venueCost}">
+                </label>
+                <br>
+                <label>
+                    노트북 렌탈비: <input type="number" id="laptopRentalCostInput" placeholder="0" value="${rentalCost}">
+                </label>
+                <br><br>
+                <button id="expenseConfirmButton">확인</button>
+                <button id="expenseCancelButton">취소</button>
+            `;
+
+            document.body.appendChild(popup);
+
+            document.getElementById("expenseConfirmButton").addEventListener("click", () => {
+                venueCost = parseInt(document.getElementById("venueCostInput").value) || 0;
+                rentalCost = parseInt(document.getElementById("laptopRentalCostInput").value) || 0;
+                createCostTable(); // 테이블 업데이트
+                popup.remove();
+            });
+
+            document.getElementById("expenseCancelButton").addEventListener("click", () => {
+                popup.remove();
+            });
+        }
+
+
+
+
+    </script>
+
+</body>
+</html>
